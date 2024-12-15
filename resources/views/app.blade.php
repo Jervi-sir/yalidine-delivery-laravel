@@ -15,8 +15,11 @@
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
+        <script>
+            localStorage.setItem('theme', 'dark');
+        </script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased dark">
         @inertia
     </body>
 </html>
