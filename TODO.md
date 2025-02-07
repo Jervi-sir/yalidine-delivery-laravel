@@ -55,6 +55,10 @@
 |--------------------------------------------------------------------------
 */
 
+- login @done
+- register @done
+- logout @done
+
 - create factory for categories @done
 
 - add product @done

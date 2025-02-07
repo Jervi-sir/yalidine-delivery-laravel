@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -71,7 +72,10 @@ class ProductController extends Controller
             // 'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate each image
         ]);
 
+        $auth = Auth::user();
+
         $product = new Product();
+        $product->user_id = $auth->id;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;

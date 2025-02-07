@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('wallet_transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // Foreign key to users table
+            $table->foreignId('user_id')->constrained();
             $table->string('type'); // deposit, withdrawal
             $table->decimal('amount', 10, 2);
             $table->string('status'); // pending, completed, failed
             $table->timestamps();
-        
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

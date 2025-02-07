@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained();
             $table->string('type'); // email, sms, in-app
             $table->text('message');
             $table->boolean('read')->default(false);
             $table->timestamps();
-        
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

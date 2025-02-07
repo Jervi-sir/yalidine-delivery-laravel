@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -33,14 +34,23 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'recipient' => 'required|string|max:255',
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'amount' => 'required|numeric|min:0',
-            'order_date' => 'required|date_format:Y-m-d', // Validate date format
+            'order_date' => 'required|date_format:Y-m-d',
+            'wilaya_id' => 'nullable',
+            'commune_id' => 'nullable',
         ]);
 
-        Order::create($request->all());
+        $auth = Auth::user();
+        $order = new Order();
+        $order->user_id = $auth->id;
+        $order->product_id = $request->product_id;
+        $order->amount = $request->amount;
+        $order->order_date = $request->order_date;
+        $order->wilaya_id = $request->wilaya_id;
+        $order->commune_id = $request->commune_id;
+        $order->save();
 
         return redirect()->route('orders.list');
     }

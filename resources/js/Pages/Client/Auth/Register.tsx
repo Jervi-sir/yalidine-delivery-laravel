@@ -1,33 +1,30 @@
 import { FormEventHandler, useState } from "react";
 import { Head, useForm } from '@inertiajs/react';
-import { ClientLayout } from '../Layout/Layout';
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
-import { GalleryVerticalEnd } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { AuthLayout } from "./AuthLayout";
 import InputError from "@/Components/InputError";
-import Checkbox from "@/Components/Checkbox";
 
-export default function Login() {
+export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
+    name: '',
     email: '',
     password: '',
-    remember: false,
+    password_confirmation: '',
   });
 
   const submit: FormEventHandler = (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    post(route('client.fetchLogin'), {
-      onFinish: () => reset('password'),
-    });
+      post(route('client.fetchRegister'), {
+          onFinish: () => reset('password', 'password_confirmation'),
+      });
   };
 
   return (
-    <AuthLayout isLogin={true}>
-      <Head title="Log in" />
+    <AuthLayout>
+      <Head title="Register" />
       {status && (
         <div className="mb-4 text-sm font-medium text-green-600">
           {status}
@@ -36,6 +33,21 @@ export default function Login() {
 
       <form onSubmit={submit}>
         <div className="flex flex-col gap-6">
+          {/* Name */}
+          <div className="grid gap-2">
+            <Label htmlFor="email">Name</Label>
+            <Input
+              id="name"
+              type="name"
+              name="name"
+              value={data.name}
+              placeholder="name"
+              autoComplete="username"
+              onChange={(e) => setData('name', e.target.value)}
+              required
+            />
+            <InputError message={errors.name} className="mt-2" />
+          </div>
           {/* Email */}
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -45,7 +57,7 @@ export default function Login() {
               name="email"
               value={data.email}
               placeholder="email"
-              autoComplete="email"
+              autoComplete="username"
               onChange={(e) => setData('email', e.target.value)}
               required
             />
@@ -53,15 +65,7 @@ export default function Login() {
           </div>
           {/* Password */}
           <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <a
-                href="#"
-                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </a>
-            </div>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
@@ -75,25 +79,24 @@ export default function Login() {
             />
             <InputError message={errors.password} className="mt-2" />
           </div>
-          <div className="block">
-            <Checkbox
-              id="remember"
-              name="remember"
-              checked={data.remember}
-              onChange={(e) =>
-                setData('remember', e.target.checked)
-              }
-              className="bg-neutral-900"
+          <div className="grid gap-2">
+            <Label htmlFor="password_confirmation">Confirm Password</Label>
+            <Input
+              id="password_confirmation"
+              type="password"
+              name="password_confirmation"
+              value={data.password_confirmation}
+              placeholder="password"
+              autoComplete="new-password"
+              onChange={(e) => setData('password_confirmation', e.target.value)}
+              required
+              showPasswordToggle
             />
-            <label
-              htmlFor="remember"
-              className="pl-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Remember me
-            </label>
+            <InputError message={errors.password_confirmation} className="mt-2" />
           </div>
+          
           <Button type="submit" className="w-full" disabled={processing}>
-            Login
+          Register
           </Button>
         </div>
       </form>

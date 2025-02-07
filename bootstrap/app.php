@@ -16,8 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
+        $middleware->alias([
+            'auth.client' => \App\Http\Middleware\RedirectIfClientNotAuthenticated::class,
+            'guest.client' => \App\Http\Middleware\RedirectIfClientAuthenticated::class, // Add this line
+        ]);
 
-        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

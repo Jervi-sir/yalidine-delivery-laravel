@@ -3,18 +3,19 @@
 use App\Http\Controllers\ApiDocsController;
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect()->route('apiDocs.getCenters');
+    // return redirect()->route('apiDocs.getCenters');
     // return Inertia::render('Client/Dashboard/Dashboard');
-    // return Inertia::render('Welcome', [
-    //     'canLogin' => Route::has('login'),
-    //     'canRegister' => Route::has('register'),
-    //     'laravelVersion' => Application::VERSION,
-    //     'phpVersion' => PHP_VERSION,
-    // ]);
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('client.login'),
+        'canRegister' => Route::has('client.register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
 Route::get('/api-docs/get-centers', [ApiDocsController::class, 'getCenters'])->name('apiDocs.getCenters');
