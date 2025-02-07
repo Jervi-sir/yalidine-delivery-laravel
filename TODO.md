@@ -64,11 +64,11 @@
 - update product
 - remove product @done
 - 
-- create order
+- create order @done
 - edit order 
 - update order
-- list orders
-- paginate orders
+- list orders @done
+- paginate orders @done
 - delete order
 - 
 - request wallet withdraw

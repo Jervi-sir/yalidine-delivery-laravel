@@ -1,7 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { ClientLayout } from '../Layout/Layout';
-import { OrderTable } from './DataTable';
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
@@ -12,8 +11,33 @@ import { format } from "date-fns";
 import {
   Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue,
 } from "@/Components/ui/select";
-export default function OrderCreate() {
-  const [date, setDate] = React.useState<Date>();
+import { useForm } from '@inertiajs/react';
+import InputError from '@/Components/InputError'; // Import your InputError component
+
+export default function OrderCreate({ products }) {
+  const { data, setData, post, processing, errors, reset } = useForm({
+    recipient: '',
+    product_id: '',
+    quantity: '',
+    amount: '',
+    order_date: null, 
+  });
+
+  const [date, setDate] = useState(null); // Local state for the date picker
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    post(route('orders.store'), {
+      onSuccess: () => {
+        reset(); // Reset the form
+        setDate(null); // Clear the date picker
+      },
+      onError: (err) => {
+        console.log(err)
+      }
+    });
+  };
+
 
   return (
     <ClientLayout path={['Order', 'Create']}>
@@ -24,8 +48,15 @@ export default function OrderCreate() {
 
           {/* Client Name */}
           <div>
-            <Label htmlFor="client-name">Client Name</Label>
-            <Input id="client-name" placeholder="Enter client name" />
+            <Label htmlFor="recipient">Recipient Name</Label>
+            <Input
+              id="recipient"
+              placeholder="Enter recipient name"
+              value={data.recipient}
+              onChange={(e) => setData('recipient', e.target.value)}
+              className="mt-1 block w-full"
+            />
+            <InputError message={errors.recipient} className="mt-2" />
           </div>
 
           {/* Location Selection */}
@@ -48,30 +79,52 @@ export default function OrderCreate() {
           {/* Product Selection */}
           <div>
             <Label htmlFor="product">Select Product</Label>
-            <Select>
+            <Select
+              value={data.product_id}
+              onValueChange={(value) => setData('product_id', value)}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Choose product" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="product1">Product 1</SelectItem>
-                  <SelectItem value="product2">Product 2</SelectItem>
-                  <SelectItem value="product3">Product 3</SelectItem>
+                  {products.map((product) => (
+                    <SelectItem key={product.id} value={product.id}>
+                      {product.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <InputError message={errors.product_id} className="mt-2" />
           </div>
 
           {/* Quantity */}
           <div>
             <Label htmlFor="quantity">Quantity</Label>
-            <Input type="number" id="quantity" placeholder="Enter quantity" />
+            <Input
+              type="number"
+              id="quantity"
+              placeholder="Enter quantity"
+              value={data.quantity}
+              onChange={(e) => setData('quantity', e.target.value)}
+              className="mt-1 block w-full"
+            />
+            <InputError message={errors.quantity} className="mt-2" />
           </div>
 
-          {/* Price */}
+          {/* Amount */}
           <div>
-            <Label htmlFor="price">Price</Label>
-            <Input type="number" id="price" placeholder="Enter price" />
+            <Label htmlFor="amount">Amount</Label>
+            <Input
+              type="number"
+              id="amount"
+              placeholder="Enter amount"
+              value={data.amount}
+              onChange={(e) => setData('amount', e.target.value)}
+              className="mt-1 block w-full"
+            />
+            <InputError message={errors.amount} className="mt-2" />
           </div>
 
           {/* Order Date */}
@@ -81,17 +134,25 @@ export default function OrderCreate() {
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-full text-left">
                   <CalendarIcon className="mr-2" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  {data.order_date ? format(data.order_date, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="start">
-                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                <Calendar
+                  mode="single"
+                  selected={data.order_date}
+                  onSelect={(e) => setData('order_date', format(e, 'yyyy-MM-dd'))}
+                  initialFocus
+                />
               </PopoverContent>
             </Popover>
+            <InputError message={errors.order_date} className="mt-2" />
           </div>
 
           {/* Submit Button */}
-          <Button className="w-full mt-4">Submit Order</Button>
+          <Button className="w-full mt-4" onClick={handleSubmit} disabled={processing}>
+            {processing ? 'Creating...' : 'Submit Order'}
+          </Button>
         </div>
       </div>
     </ClientLayout>

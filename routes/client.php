@@ -41,7 +41,7 @@
   Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show'); // For Course Details
 
   // Orders
-  Route::get('/orders', [OrderController::class, 'index'])->name('orders.list'); // Order List
+  Route::get('/orders', [OrderController::class, 'list'])->name('orders.list'); // Order List
   Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create'); // Create Order Form
   Route::post('/orders', [OrderController::class, 'store'])->name('orders.store'); // Store new order
   Route::post('/orders/bulk-upload', [OrderController::class, 'bulkUpload'])->name('orders.bulk_upload'); // Bulk Order Upload
