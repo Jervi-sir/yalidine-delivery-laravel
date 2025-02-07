@@ -1,37 +1,44 @@
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { ClientLayout } from '../Layout/Layout';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
-import { Textarea } from "@/Components/ui/textarea"; // Import Textarea
-import {
-  Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue,
-} from "@/Components/ui/select";
-import { cn } from "@/lib/utils" // Assuming you have this utility for classnames
+import { Textarea } from "@/Components/ui/textarea";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/Components/ui/select";
+import ProductImageUpload from './ProductImageUpload';
+import InputError from '@/Components/InputError';
 
-export default function ProductCreate() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [weight, setWeight] = useState('');
-  const [category, setCategory] = useState('');
-  const [image, setImage] = useState(null); // For image upload
+export default function ProductCreate({ categories }) {
+  const { data, setData, post, processing, errors, reset, } = useForm({
+    name: '', description: '', price: '', weight: '',
+    category_id: '', images: [],
+  });
+  const [imageErrors, setImageErrors] = useState([]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send data to API)
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('price', price);
-    formData.append('weight', weight);
-    formData.append('category_id', category); // Assuming category_id is what your backend expects
-    if (image) {
-        formData.append('image', image);
-    }
-    // ... (Send formData to your Laravel API endpoint)
-    console.log(formData);
+
+    post(route('products.store'), {
+      onSuccess: () => {
+        reset(); // Reset the form data after successful submission
+      },
+      onError: (errors: any) => {
+        if (errors.images) {
+          setImageErrors(errors.images);
+          delete errors.images; // Remove from general errors
+        } else {
+          setImageErrors([]); // Clear image errors if none from backend
+        }
+      },
+      onFinish: () => {
+        setData('images', []);
+      }
+    });
+  };
+
+  const handleImageChange = (newImages) => {
+    setData('images', newImages);
   };
 
   return (
@@ -47,9 +54,12 @@ export default function ProductCreate() {
             <Input
               id="product-name"
               placeholder="Enter product name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={data.name}
+              onChange={(e) => setData('name', e.target.value)}
+              className="mt-1 block w-full"
+              type="text"
             />
+            <InputError message={errors.name} className="mt-2" />
           </div>
 
           {/* Product Description */}
@@ -58,10 +68,11 @@ export default function ProductCreate() {
             <Textarea
               id="product-description"
               placeholder="Enter product description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="resize-none" // Prevent textarea resizing
+              value={data.description}
+              onChange={(e) => setData('description', e.target.value)}
+              className="mt-1 block w-full resize-none"
             />
+            <InputError message={errors.description} className="mt-2" />
           </div>
 
           {/* Product Price */}
@@ -71,9 +82,11 @@ export default function ProductCreate() {
               type="number"
               id="product-price"
               placeholder="Enter price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={data.price}
+              onChange={(e) => setData('price', e.target.value)}
+              className="mt-1 block w-full"
             />
+            <InputError message={errors.price} className="mt-2" />
           </div>
 
           {/* Product Weight */}
@@ -83,44 +96,39 @@ export default function ProductCreate() {
               type="number"
               id="product-weight"
               placeholder="Enter weight"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              value={data.weight}
+              onChange={(e) => setData('weight', e.target.value)}
+              className="mt-1 block w-full"
             />
+            <InputError message={errors.weight} className="mt-2" />
           </div>
 
           {/* Product Category */}
           <div>
             <Label htmlFor="product-category">Category</Label>
-            <Select value={category} onValueChange={setCategory}>
+            <Select value={data.category_id} onValueChange={(value) => setData('category_id', value)} >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Choose category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="category1">Category 1</SelectItem>
-                  <SelectItem value="category2">Category 2</SelectItem>
-                  {/* ... more categories */}
+                  {categories.map((category) => (
+                    <SelectItem value={category.id} key={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <InputError message={errors.category_id} className="mt-2" />
           </div>
 
           {/* Product Image */}
-          <div>
-            <Label htmlFor="product-image">Image</Label>
-            <Input
-              type="file"
-              id="product-image"
-              onChange={(e) => setImage(e.target.files[0])} // Store the selected file
-              className={cn("border-none shadow-none p-0")} // remove default styling
-            />
-            {image && ( // Display a preview of the selected image
-              <img src={URL.createObjectURL(image)} alt="Product Preview" className="mt-2 max-w-full h-auto" />
-            )}
-          </div>
+          <ProductImageUpload onChange={handleImageChange} images={data.images} />
+          <InputError message={imageErrors?.length > 0 ? imageErrors[0] : null} className="mt-2" /> {/* Display image errors */}
 
           {/* Submit Button */}
-          <Button className="w-full mt-4" onClick={handleSubmit}>Create Product</Button>
+          <Button className="w-full mt-4" onClick={handleSubmit} disabled={processing}> {processing ? 'Creating...' : 'Create Product'}</Button>
         </div>
       </div>
     </ClientLayout>

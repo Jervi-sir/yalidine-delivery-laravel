@@ -49,3 +49,43 @@
   - Notification Center (Unread updates for users) @done
 
 
+/*
+|--------------------------------------------------------------------------
+| adding database to the front end
+|--------------------------------------------------------------------------
+*/
+
+- create factory for categories @done
+
+- add product @done
+- list products @done
+- paginate products @done
+- edit product
+- update product
+- remove product @done
+- 
+- create order
+- edit order 
+- update order
+- list orders
+- paginate orders
+- delete order
+- 
+- request wallet withdraw
+- list wallet history
+- 
+- show profile 
+- edit profile
+- update profile
+- 
+- list notifications
+- mark as read 
+- 
+- show dashboard statistics
+- 
+- list courses
+- show this course
+- 
+- list suggested products
+- create new product from this selected suggested product
+- 

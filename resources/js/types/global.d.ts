@@ -7,7 +7,7 @@ declare global {
     interface Window {
         axios: AxiosInstance;
     }
-
+    function route(routeName: string, parameters?: any[] | any, absolute? = true): string
     /* eslint-disable no-var */
     var route: typeof ziggyRoute;
 }

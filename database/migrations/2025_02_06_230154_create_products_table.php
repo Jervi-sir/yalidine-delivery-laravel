@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->decimal('weight', 10, 2)->nullable();
             $table->unsignedBigInteger('category_id')->nullable(); // Foreign key to categories table
-            $table->string('image')->nullable(); // Path to the image
+            $table->longText('images')->nullable(); // Path to the image
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories'); // Define foreign key constraint

@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { useState, useEffect } from "react"; // Import useState and useEffect
 import { ClientLayout } from "../Layout/Layout";
-import { Head } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import OrderCreate from "../Orders/OrderCreate";
 import { ProductEdit } from "./ProductEdit";
 
@@ -18,50 +18,33 @@ export type Product = {
   price: number;
   weight: number;
   category_id: number; // Or string
+  category_name: string;
   image: string | null; // Store the image path
 };
 
-const fakeProducts: Product[] = [  // Fake product data
-  {
-    id: 1,
-    name: "Product A",
-    description: "Description of Product A",
-    price: 25.99,
-    weight: 1.5,
-    category_id: 101,
-    image: "/images/product_a.jpg", // Example image path
-  },
-  {
-    id: 2,
-    name: "Product B",
-    description: "Description of Product B",
-    price: 49.99,
-    weight: 2.2,
-    category_id: 102,
-    image: "/images/product_b.png", // Example image path
-  },
-  {
-    id: 3,
-    name: "Product C",
-    description: "Description of Product C",
-    price: 19.99,
-    weight: 0.8,
-    category_id: 101,
-    image: null, // No image for this product
-  },
-  // ... add more fake products as needed
-];
 
-export default function ProductList() {
-  const [products, setProducts] = useState<Product[]>(fakeProducts); // Use fake data
-  const [loading, setLoading] = useState(true);
+export default function ProductList({ products: initialProducts, categories }) {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   useEffect(() => {
-  }, []); // Empty dependency array ensures this runs only once on mount
-
+    // This is only necessary if you are fetching data on the client-side
+    // If the data is passed as a prop, you don't need this
+    // setLoading(true);
+    // fetch('/api/products?page=' + (pagination.pageIndex + 1) + '&per_page=' + pagination.pageSize) // Adjust API endpoint
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         setProducts(data.data); // Assuming your API returns { data: [...] }
+    //     })
+    //     .catch(err => setError(err))
+    //     .finally(() => setLoading(false));
+}, [pagination.pageIndex, pagination.pageSize]); // Add pagination to dependency array
 
   const columns: ColumnDef<Product>[] = [
     {
@@ -92,9 +75,9 @@ export default function ProductList() {
       cell: ({ row }) => <div className="text-right">{row.getValue("weight")}</div>,
     },
     {
-      accessorKey: "category_id", // Display Category ID or name
+      accessorKey: "category_name", // Display Category ID or name
       header: "Category",
-      cell: ({ row }) => <div>{row.getValue("category_id")}</div>, // Or fetch category name
+      cell: ({ row }) => <div>{row.getValue("category_name")}</div>, // Or fetch category name
     },
     {
       accessorKey: "image",
@@ -167,6 +150,7 @@ export default function ProductList() {
   | Edit
   |--------------------------------------------------------------------------
   */
+  const { delete: fetchDelete } = useForm();
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const handleDelete = (productId: number) => {
@@ -174,10 +158,17 @@ export default function ProductList() {
     const updatedProducts = products.filter((product) => product.id !== productId);
     setProducts(updatedProducts);
 
-    // If you're using an API, you'd also send a DELETE request to your backend here:
-    // fetch(`/api/products/${productId}`, { method: 'DELETE' })
-    //   .then(...)
-    //   .catch(...);
+    if (confirm('Are you sure you want to delete this product?')) {
+      fetchDelete(route('products.destroy', productId), {
+          onSuccess: () => {
+              // Optionally show a success message or update other parts of the UI
+          },
+          onError: (errors) => {
+              // Handle errors, e.g., display an error message
+              console.error("Deletion failed:", errors);
+          }
+      });
+  }
   };
   const handleEdit = (product: Product) => {
     setProductToEdit(product);
@@ -195,7 +186,6 @@ export default function ProductList() {
     // If you're using an API, you would also send a PUT or PATCH request to your backend.
   };
 
-
   const table = useReactTable({
     data: products,
     columns,
@@ -207,7 +197,9 @@ export default function ProductList() {
     state: {
       sorting,
       columnVisibility,
+      pagination,
     },
+    onPaginationChange: setPagination,
   });
 
   // if (loading) {
