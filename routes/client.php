@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\CourseController;
 use App\Http\Controllers\Client\DashboardController;
+use App\Http\Controllers\Client\LocationController;
 use App\Http\Controllers\Client\NotificationController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\OrderHistoryController;
@@ -65,7 +66,7 @@ Route::prefix('client')->middleware(['auth.client'])->group(function () {
     Route::put('{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark_as_read'); // Mark notification as read
   });
   // Settings
-  Route::prefix('settings')->group(function () {
+  Route::prefix('settings')->group(callback: function () {
     Route::get('/', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/', [SettingController::class, 'update'])->name('settings.update'); // or PATCH
   });
@@ -75,4 +76,12 @@ Route::prefix('client')->middleware(['auth.client'])->group(function () {
     Route::get('edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('update', [ProfileController::class, 'update'])->name('profile.update'); // Or PATCH
   });
+
+  // Locations
+  Route::prefix('locations')->group(function () {
+    Route::get('wilayas', [LocationController::class, 'listWilayas'])->name('locations.wilayas');
+    Route::get('centers', [LocationController::class, 'listCenters'])->name('locations.centers');
+    Route::get('communes', [LocationController::class, 'listCommunes'])->name('locations.communes');
+  });
+
 });

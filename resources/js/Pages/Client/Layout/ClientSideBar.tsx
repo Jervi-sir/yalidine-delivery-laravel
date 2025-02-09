@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { BookOpen, Bot, Command, LifeBuoy, Send, SquareTerminal, BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, } from "lucide-react"
+import { BookOpen, Bot, Command, LifeBuoy, Send, SquareTerminal, BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, LocateIcon, } from "lucide-react"
 import { NavMain } from "@/Components/nav-main"
 import { NavSecondary } from "@/Components/nav-secondary"
 import {
@@ -79,6 +79,25 @@ const data = {
         {
           title: "Request Withdraw",
           url: route('wallet.requestWithdraw'),
+        },
+      ],
+    },
+    {
+      title: "Locations",
+      url: "#",
+      icon: LocateIcon,
+      items: [
+        {
+          title: "Wilaya",
+          url: route('locations.wilayas'),
+        },
+        {
+          title: "Centers",
+          url: route('locations.centers'),
+        },
+        {
+          title: "Communes",
+          url: route('locations.communes'),
         },
       ],
     },
