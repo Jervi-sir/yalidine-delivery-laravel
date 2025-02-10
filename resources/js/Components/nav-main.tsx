@@ -27,7 +27,8 @@ export function NavMain({
     isActive?: boolean
     items?: {
       title: string
-      url: string
+      url: string,
+      isActive?: boolean
     }[]
   }[]
 }) {
@@ -38,11 +39,11 @@ export function NavMain({
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+              <SidebarMenuButton asChild>
+                <div className="cursor-pointer">
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </div>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -57,7 +58,7 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <a href={subItem.url} className={subItem.isActive && "bg-zinc-800"}>
                               <span>{subItem.title}</span>
                             </a>
                           </SidebarMenuSubButton>

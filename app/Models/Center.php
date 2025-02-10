@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Center extends Model
 {
     protected $fillable = ['center_id', 'name', 'address', 'gps', 'commune_id', 'commune_name', 'wilaya_id', 'wilaya_name'];
-    protected $primaryKey = 'center_id';
 
     public function commune() {
         return $this->belongsTo(Commune::class);

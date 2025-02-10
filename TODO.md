@@ -93,3 +93,5 @@
 - list suggested products
 - create new product from this selected suggested product
 - 
+- list wilaya @done
+- list centers @done

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { BookOpen, Bot, Command, LifeBuoy, Send, SquareTerminal, BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, LocateIcon, } from "lucide-react"
 import { NavMain } from "@/Components/nav-main"
@@ -11,118 +9,138 @@ import {
 import { Avatar, AvatarFallback, AvatarImage, } from "@/Components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/Components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar, } from "@/Components/ui/sidebar"
-import { Link } from "@inertiajs/react"
+import { Link, usePage } from "@inertiajs/react"
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: route('client.dashboard'),
-      icon: SquareTerminal,
-      isActive: false,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Orders",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "List",
-          url: route('orders.list'),
-        },
-        {
-          title: "Create",
-          url: route('orders.create'),
-        },
-
-      ],
-    },
-    {
-      title: "Products",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "List",
-          url: route('products.list'),
-        },
-        {
-          title: "Create",
-          url: route('products.create'),
-        },
-        {
-          title: "Suggest",
-          url: route('products.suggest'),
-        },
-      ],
-    },
-    {
-      title: "Wallet",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "History",
-          url: route('wallet.history'),
-        },
-        {
-          title: "Request Withdraw",
-          url: route('wallet.requestWithdraw'),
-        },
-      ],
-    },
-    {
-      title: "Locations",
-      url: "#",
-      icon: LocateIcon,
-      items: [
-        {
-          title: "Wilaya",
-          url: route('locations.wilayas'),
-        },
-        {
-          title: "Centers",
-          url: route('locations.centers'),
-        },
-        {
-          title: "Communes",
-          url: route('locations.communes'),
-        },
-      ],
-    },
-
-  ],
-  navSecondary: [
-    {
-      title: "Courses",
-      url: route('courses.list'),
-      icon: LifeBuoy,
-    },
-    {
-      title: "Notifications",
-      url: route('notifications.list'),
-      icon: LifeBuoy,
-    },
-    {
-      title: "Profile",
-      url: route('profile.show'),
-      icon: Send,
-    },
-  ],
+const isRouteActive = (routeName) => {
+  return route().current(routeName);
 }
 
 export function ClientSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { props: InertiaProps } = usePage();
+
+  const data = {
+    user: {
+      name: InertiaProps.auth.user.name,
+      email: InertiaProps.auth.user.email,
+      avatar: null,
+    },
+    navMain: [
+      {
+        title: "Dashboard",
+        url: route('client.dashboard'),
+        icon: SquareTerminal,
+        isActive: isRouteActive('client.dashboard'),
+        items: [
+          {
+            title: "Dashboard",
+            url: route('client.dashboard'),
+            isActive: isRouteActive('client.dashboard'),
+          },
+        ],
+      },
+      {
+        title: "Orders",
+        url: "#",
+        icon: Bot,
+        isActive: isRouteActive('orders.list') || isRouteActive('orders.create'),
+        items: [
+          {
+            title: "List",
+            url: route('orders.list'),
+            isActive: isRouteActive('orders.list'),
+          },
+          {
+            title: "Create",
+            url: route('orders.create'),
+            isActive: isRouteActive('orders.create'),
+          },
+
+        ],
+      },
+      {
+        title: "Products",
+        url: "#",
+        icon: BookOpen,
+        isActive: isRouteActive('products.list') || isRouteActive('products.create') || isRouteActive('products.suggest'),
+        items: [
+          {
+            title: "List",
+            url: route('products.list'),
+            isActive: isRouteActive('products.list'),
+          },
+          {
+            title: "Create",
+            url: route('products.create'),
+            isActive: isRouteActive('products.create'),
+          },
+          {
+            title: "Suggest",
+            url: route('products.suggest'),
+            isActive: isRouteActive('products.suggest'),
+          },
+        ],
+      },
+      {
+        title: "Wallet",
+        url: "#",
+        icon: BookOpen,
+        isActive: isRouteActive('wallet.history') || isRouteActive('wallet.requestWithdraw'),
+        items: [
+          {
+            title: "History",
+            url: route('wallet.history'),
+            isActive: isRouteActive('wallet.history'),
+          },
+          {
+            title: "Request Withdraw",
+            url: route('wallet.requestWithdraw'),
+            isActive: isRouteActive('wallet.requestWithdraw'),
+          },
+        ],
+      },
+      {
+        title: "Locations",
+        url: "#",
+        icon: LocateIcon,
+        isActive: isRouteActive('locations.wilayas') || isRouteActive('locations.centers'),
+        items: [
+          {
+            title: "Wilaya",
+            url: route('locations.wilayas'),
+            isActive: isRouteActive('locations.wilayas'),
+          },
+          {
+            title: "Centers",
+            url: route('locations.centers'),
+            isActive: isRouteActive('locations.centers'),
+          }
+        ],
+      },
+
+    ],
+    navSecondary: [
+      {
+        title: "Courses",
+        url: route('courses.list'),
+        icon: LifeBuoy,
+        isActive: isRouteActive('courses.list'),
+      },
+      {
+        title: "Notifications",
+        url: route('notifications.list'),
+        icon: LifeBuoy,
+        isActive: isRouteActive('notifications.list'),
+      },
+      {
+        title: "Profile",
+        url: route('profile.show'),
+        icon: Send,
+        isActive: isRouteActive('profile.show'),
+      },
+    ],
+  }
+
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>

@@ -25,6 +25,11 @@
         "phpunit/phpunit": "^11.0.1"
     },
     "autoload": {
+        "files": [
+            "app/Helpers/DeliveryApiHelpers.php",
+            "app/Helpers/ClientProductHelpers.php",
+            "app/Helpers/ClientOrderHelpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",

@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useState, useEffect } from "react"; // Import useState and useEffect
 import { ClientLayout } from "../Layout/Layout";
 import { Head, useForm } from "@inertiajs/react";
-import OrderCreate from "../Orders/OrderCreate";
+import OrderCreate from "../Orders/Create/OrderCreate";
 import { ProductEdit } from "./ProductEdit";
 
 // Define the Product type (adjust properties as needed)

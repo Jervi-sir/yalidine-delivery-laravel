@@ -9,10 +9,8 @@ export type Order = {
   amount: number;
 };
 
-export default function OrderList() {
+export default function OrderList({ orders, pagination }) {
   const { props } = usePage();
-  const orders = props.orders.data; // Access the data from the paginated results
-  const pagination = props.orders; // The full pagination object
 
   const handlePageChange = (page) => {
     //Inertia.get(route('orders.index'), { page: page }); // Use Inertia.get for pagination

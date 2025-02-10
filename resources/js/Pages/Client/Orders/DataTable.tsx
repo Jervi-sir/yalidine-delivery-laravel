@@ -9,18 +9,37 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, PhoneIcon } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
+import { SidebarMenuButton } from "@/Components/ui/sidebar";
+import { Avatar } from "@/Components/ui/avatar";
 
 export type Order = {
   id: string;
-  recipient: string;
+  recipient: {
+    first_name: string;
+    family_name: string;
+    contact_phone: string;
+  };
   status: "pending" | "shipped" | "delivered" | "canceled";
-  amount: number;
+  price: number;
+  product: {
+    name: string;
+    description: string;
+    price: number;
+    weight: number;
+    images: string[];
+    category: {
+      id: number;
+      name: string;
+    } | null;
+    created_at: string;
+    updated_at: string;
+  };
+  created_at: string;
 };
-
 export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "id",
@@ -30,7 +49,20 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "recipient",
     header: "Recipient",
-    cell: ({ row }) => <div>{row.getValue("recipient")}</div>,
+    cell: ({ row }) => {
+      const recipient = row.getValue("recipient") as Order["recipient"];
+      return (
+        <div className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">{recipient.first_name} - {recipient.family_name}</span>
+            <div className="flex items-center gap-2">
+              <PhoneIcon size={10} />
+              <span className="truncate text-xs">{recipient.contact_phone}</span>
+            </div>
+          </div>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -42,14 +74,14 @@ export const columns: ColumnDef<Order>[] = [
     ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "price",
+    header: () => <div className="text-right">Price</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
+      const price = parseFloat(row.getValue("price"));
+      const formatted = new Intl.NumberFormat("ar-AR", {
         style: "currency",
-        currency: "USD",
-      }).format(amount);
+        currency: "DZD",
+      }).format(price);
       return <div className="text-right font-medium">{formatted}</div>;
     },
   },
