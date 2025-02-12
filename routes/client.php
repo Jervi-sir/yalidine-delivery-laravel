@@ -58,7 +58,7 @@ Route::prefix('client')->middleware(['auth.client'])->group(function () {
   // Wallet
   Route::prefix('wallet')->group(function () {
     Route::get('/', [WalletController::class, 'show'])->name('wallet.history');
-    Route::post('withdraw', [WalletController::class, 'withdraw'])->name('wallet.requestWithdraw'); // For Withdraw Request
+    Route::get('withdraw', [WalletController::class, 'withdraw'])->name('wallet.requestWithdraw'); // For Withdraw Request
   });
   // Notifications
   Route::prefix('notifications')->group(function () {

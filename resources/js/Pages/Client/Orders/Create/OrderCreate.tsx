@@ -26,8 +26,8 @@ const OrderCreateContent = () => {
     <ClientLayout path={['Order', 'Create']}>
       <Head title="Create an Order" />
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className='max-w-md p-4 border rounded-lg shadow-md '>
-          <h2 className="text-xl font-bold mb-4">Create Order</h2>
+        <div className='p-4 border rounded-lg shadow-md '>
+          <h2 className="text-xl font-bold mb-4">Create Parcel</h2>
           {/*--- Expéditeur ---*/}
           <ExpediteurSection />
           <Separator className='my-4' />
@@ -44,7 +44,6 @@ const OrderCreateContent = () => {
           <WeightSection />
           <Separator className='my-4' />
 
-
           {/* Order Date */}
           {/* <DateInputComponent
             label={'Order Date'}
@@ -54,7 +53,7 @@ const OrderCreateContent = () => {
           /> */}
           {/* Submit Button */}
           <Button className="w-full" onClick={handleSubmit} disabled={processing}>
-            {processing ? 'Creating...' : 'Submit Order'}
+            {processing ? 'Creating...' : 'Submit Parcel'}
           </Button>
         </div>
       </div>

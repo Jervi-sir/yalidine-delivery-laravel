@@ -83,11 +83,11 @@ class OrderController extends Controller
         $order->contact_phone = $request->contactPhone;
         // sender
         $order->from_wilaya_id = $request->from_wilaya_id;
-        $order->from_wilaya_name = Wilaya::find((int)$request->from_wilaya_id);
+        $order->from_wilaya_name = Wilaya::find((int)$request->from_wilaya_id)->name;
         
         // location
         $order->address = $request->address;
-        $order->to_commune_name = Commune::find((int)$request->to_commune_id);
+        $order->to_commune_name = Commune::find((int)$request->to_commune_id)->name;
         $order->to_wilaya_name = $request->to_wilaya_name; //Wiliaya::find((int)$request->to_wilaya_id);
         $order->wilaya_id = (int)$request->to_wilaya_id;
         $order->commune_id = (int)$request->to_commune_id;
@@ -114,11 +114,11 @@ class OrderController extends Controller
         $order->width = $is_more_then_5kg ? $request->order_width : null;
         $order->length = $is_more_then_5kg ? $request->order_length : null;
         $order->weight = $is_more_then_5kg ? $request->order_weight : null;
-        
 
         $order->order_date = $request->order_date;
         $order->wilaya_id = $request->wilaya_id;
         $order->commune_id = $request->commune_id;
+        dd($order);
         $order->save();
 
         return redirect()->route('orders.list');

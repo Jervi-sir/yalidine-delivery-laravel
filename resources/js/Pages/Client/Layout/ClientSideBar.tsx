@@ -57,65 +57,65 @@ export function ClientSidebar({ ...props }: React.ComponentProps<typeof Sidebar>
 
         ],
       },
-      {
-        title: "Products",
-        url: "#",
-        icon: BookOpen,
-        isActive: isRouteActive('products.list') || isRouteActive('products.create') || isRouteActive('products.suggest'),
-        items: [
-          {
-            title: "List",
-            url: route('products.list'),
-            isActive: isRouteActive('products.list'),
-          },
-          {
-            title: "Create",
-            url: route('products.create'),
-            isActive: isRouteActive('products.create'),
-          },
-          {
-            title: "Suggest",
-            url: route('products.suggest'),
-            isActive: isRouteActive('products.suggest'),
-          },
-        ],
-      },
-      {
-        title: "Wallet",
-        url: "#",
-        icon: BookOpen,
-        isActive: isRouteActive('wallet.history') || isRouteActive('wallet.requestWithdraw'),
-        items: [
-          {
-            title: "History",
-            url: route('wallet.history'),
-            isActive: isRouteActive('wallet.history'),
-          },
-          {
-            title: "Request Withdraw",
-            url: route('wallet.requestWithdraw'),
-            isActive: isRouteActive('wallet.requestWithdraw'),
-          },
-        ],
-      },
-      {
-        title: "Locations",
-        url: "#",
-        icon: LocateIcon,
-        isActive: isRouteActive('locations.wilayas') || isRouteActive('locations.centers'),
-        items: [
-          {
-            title: "Wilaya",
-            url: route('locations.wilayas'),
-            isActive: isRouteActive('locations.wilayas'),
-          },
-          {
-            title: "Centers",
-            url: route('locations.centers'),
-            isActive: isRouteActive('locations.centers'),
-          }
-        ],
-      },
+      // {
+      //   title: "Products",
+      //   url: "#",
+      //   icon: BookOpen,
+      //   isActive: isRouteActive('products.list') || isRouteActive('products.create') || isRouteActive('products.suggest'),
+      //   items: [
+      //     {
+      //       title: "List",
+      //       url: route('products.list'),
+      //       isActive: isRouteActive('products.list'),
+      //     },
+      //     {
+      //       title: "Create",
+      //       url: route('products.create'),
+      //       isActive: isRouteActive('products.create'),
+      //     },
+      //     {
+      //       title: "Suggest",
+      //       url: route('products.suggest'),
+      //       isActive: isRouteActive('products.suggest'),
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: "Wallet",
+      //   url: "#",
+      //   icon: BookOpen,
+      //   isActive: isRouteActive('wallet.history') || isRouteActive('wallet.requestWithdraw'),
+      //   items: [
+      //     {
+      //       title: "History",
+      //       url: route('wallet.history'),
+      //       isActive: isRouteActive('wallet.history'),
+      //     },
+      //     {
+      //       title: "Request Withdraw",
+      //       url: route('wallet.requestWithdraw'),
+      //       isActive: isRouteActive('wallet.requestWithdraw'),
+      //     },
+      //   ],
+      // },
+      // {
+      //   title: "Locations",
+      //   url: "#",
+      //   icon: LocateIcon,
+      //   isActive: isRouteActive('locations.wilayas') || isRouteActive('locations.centers'),
+      //   items: [
+      //     {
+      //       title: "Wilaya",
+      //       url: route('locations.wilayas'),
+      //       isActive: isRouteActive('locations.wilayas'),
+      //     },
+      //     {
+      //       title: "Centers",
+      //       url: route('locations.centers'),
+      //       isActive: isRouteActive('locations.centers'),
+      //     }
+      //   ],
+      // },
 
     ],
     navSecondary: [

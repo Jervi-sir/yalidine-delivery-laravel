@@ -8,7 +8,7 @@ export const ExpediteurSection = () => {
   } = useOrder()
   return (
     <div className='space-y-2'>
-      <Label>Expéditeur</Label>
+      <Label >Expéditeur</Label>
       <SelectDropdownComponent
         label={'Wilaya de départ'}
         placeholder={'Enter from wilaya name'}
